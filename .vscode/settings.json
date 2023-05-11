@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "stdlib.h": "c",
+    "produtos.h": "c",
+    "stdio.h": "c",
+    "cstdlib": "c",
+    "string.h": "c"
+  },
+  "cSpell.language": "pt,pt-PT,en-GB,en",
+  "cSpell.enableFiletypes": ["apex", "apex-anon", "apexlog"],
+  "C_Cpp.errorSquiggles": "disabled"
+}
