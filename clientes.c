@@ -72,6 +72,7 @@ Cliente *buscaCliente(ListaCliente *lista, int codigo)
 
 Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
 {
+    bool exist = false;
 
     cliente->qtde_compras = MIN_PRODUTOS + rand() % (MAX_PRODUTOS - MIN_PRODUTOS + 1);
     cliente->lista_compras = criarListaProdutos();
@@ -79,8 +80,7 @@ Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
     int i;
     for (i = 0; i < cliente->qtde_compras; i++)
     {
-        char exist = 'f';
-        while (exist == 'f')
+        while (exist == false)
         {
             int codigo_produto = gerarCodigoProdutoRand();
             Produto *produto = buscaProduto(listaProduto, codigo_produto);
@@ -90,9 +90,10 @@ Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
                 cliente->lista_compras->contador++;
                 cliente->totalTempoCaixa += produto->tcaixa;
                 cliente->totalTempoCompra += produto->tcompra;
-                exist = 't';
+                exist = true;
             }
         }
+        exist = false;
     }
     return cliente;
 }

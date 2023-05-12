@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct {
     int codigo;
     char nome[150];
     int clientesAtendidos;
     int tempoDeAtendimento;
+    bool aTrabalhar;
 } Funcionario;
 
 typedef struct noFuncionario {

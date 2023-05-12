@@ -70,6 +70,7 @@ Funcionario *leFuncionario(FILE *arquivo){
     fgets(funcionario->nome, 150, arquivo);
     funcionario->clientesAtendidos=0;
     funcionario->tempoDeAtendimento=0;
+    funcionario->aTrabalhar = false;
     return funcionario;
 }
 ListaFuncionario *leFuncionarios(char *nome_arquivo){

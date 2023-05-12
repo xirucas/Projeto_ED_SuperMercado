@@ -19,18 +19,20 @@ Caixa *criarCaixa(int codigoCaixa, Funcionario *funcionario)
 
 ListaCaixa *criarCaixas(int numCaixas, ListaFuncionario *listaFuncionario)
 {
+    bool exist=false;
     ListaCaixa *listaCaixas = criarListaCaixas();
     for (int i = 1; i <= numCaixas; i++)
     {
-        char exist='f';
+        
         Funcionario *funcionario;
-        while (exist=='f')
+        while (exist==false)
         {
             funcionario = buscaFuncionario(listaFuncionario, gerarCodigoFuncionarioRand());
             if(funcionario!=NULL){
-                exist='t';
+                exist=true;
             }
         }
+        exist=false;
         Caixa *caixa = criarCaixa(i, funcionario);
         listaCaixas->inicio = adicionaCaixaLista(listaCaixas->inicio, caixa);
         listaCaixas->contador++;
