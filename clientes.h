@@ -4,6 +4,7 @@
 #include "produtos.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <time.h>
 
@@ -12,8 +13,8 @@ typedef struct cliente
     int codigo;
     char nome[150];
     int qtde_compras;
-    int totalTempoCompra;
-    int totalTempoCaixa;
+    float totalTempoCompra;
+    float totalTempoCaixa;
     ListaProduto *lista_compras;
 } Cliente;
 
@@ -35,9 +36,14 @@ void liberaClientes(ListaCliente *lista);
 Cliente *buscaCliente(ListaCliente *lista, int codigo);
 Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto);
 ListaCliente *leClientes(char *nome_arquivo, ListaProduto *listaProduto);
-void realizaCompra(Cliente *cliente, NoProduto *produto);
+
 Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto);
 int gerarCodigoProdutoRand();
 
+ListaCliente *criarListaClientes();
+Cliente *removerClientesDaFila(ListaCliente *fila);
+void adicionarClienteFila(ListaCliente *fila, Cliente *cliente);
+void removerClienteFilaInicio(ListaCliente *fila);
+bool isFilaVazia(ListaCliente *fila);
 
 #endif

@@ -4,7 +4,7 @@
 
 NoCliente *insereCliente(NoCliente *lista, Cliente *cliente)
 {
-    NoCliente *novoNo = (NoCliente *) malloc(sizeof(NoCliente));
+    NoCliente *novoNo = (NoCliente *)malloc(sizeof(NoCliente));
     if (novoNo == NULL)
     {
         printf("Erro: nao foi possivel alocar memoria.\n");
@@ -70,7 +70,6 @@ Cliente *buscaCliente(ListaCliente *lista, int codigo)
     return NULL;
 }
 
-
 Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
 {
 
@@ -89,6 +88,8 @@ Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
             {
                 cliente->lista_compras->inicio = insereProduto(cliente->lista_compras->inicio, produto);
                 cliente->lista_compras->contador++;
+                cliente->totalTempoCaixa += produto->tcaixa;
+                cliente->totalTempoCompra += produto->tcompra;
                 exist = 't';
             }
         }
@@ -100,13 +101,13 @@ Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto)
 {
     Cliente *cliente = (Cliente *)malloc(sizeof(Cliente));
     char ch = '\0';
-    char aux[50] = {'\0'}; 
+    char aux[50] = {'\0'};
 
     int i = 0;
-    while (ch != '\t' && ch != '\n' && ch != EOF && i < 50) 
+    while (ch != '\t' && ch != '\n' && ch != EOF && i < 50)
     {
         ch = fgetc(arquivo);
-        if (ch != '\t' && ch != '\n' && ch != EOF) 
+        if (ch != '\t' && ch != '\n' && ch != EOF)
         {
             aux[i] = ch;
             i++;
@@ -116,23 +117,23 @@ Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto)
 
     ch = '\0';
     i = 0;
-    while (ch != '\t' && ch != EOF && ch != '\n' && i < 50) 
+    while (ch != '\t' && ch != EOF && ch != '\n' && i < 50)
     {
         ch = fgetc(arquivo);
-        if (ch != '\t' && ch != '\n' && ch != EOF) 
+        if (ch != '\t' && ch != '\n' && ch != EOF)
         {
             aux[i] = ch;
             i++;
         }
     }
     strcpy(cliente->nome, aux);
-    cliente->qtde_compras=0;
-    cliente->totalTempoCaixa=0;
-    cliente->totalTempoCompra=0;
+    cliente->qtde_compras = 0;
+    cliente->totalTempoCaixa = 0;
+    cliente->totalTempoCompra = 0;
     cliente->lista_compras = NULL;
-    
+
     cliente = produtosAComprar(cliente, listaProduto);
-    
+
     return cliente;
 }
 ListaCliente *leClientes(char *nome_arquivo, ListaProduto *listaProduto)
@@ -144,15 +145,7 @@ ListaCliente *leClientes(char *nome_arquivo, ListaProduto *listaProduto)
         exit(EXIT_FAILURE);
     }
 
-    ListaCliente *lista = (ListaCliente *)malloc(sizeof(ListaCliente));
-    if (lista == NULL)
-    {
-        printf("Erro: nao foi possivel alocar memoria.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    lista->inicio = NULL;
-    lista->contador = 0;
+    ListaCliente *lista = criarListaClientes();
     while (!feof(arquivo))
     {
         Cliente *cliente = leCliente(arquivo, listaProduto);
@@ -174,11 +167,62 @@ int gerarCodigoProdutoRand()
         {50001, 51094}};
     int num_intervalos = sizeof(intervalos) / sizeof(intervalos[0]);
     int i, num_aleatorio;
-    
+
     i = rand() % num_intervalos;
     num_aleatorio = rand() % (intervalos[i][1] - intervalos[i][0] + 1) + intervalos[i][0];
     return num_aleatorio;
 }
 
+ListaCliente *criarListaClientes()
+{
+    ListaCliente *lista = (ListaCliente *)malloc(sizeof(ListaCliente));
+    if (lista == NULL)
+    {
+        printf("Erro: nao foi possivel alocar memoria.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    lista->inicio = NULL;
+    lista->contador = 0;
+    return lista;
+}
+
+void adicionarClienteFila(ListaCliente *fila, Cliente *cliente)
+{
+    fila->inicio = insereCliente(fila->inicio, cliente);
+    fila->contador++;
+}
+
+void removerClienteFilaInicio(ListaCliente *fila)
+{
+    if (fila->contador == 0)
+    {
+        printf("Erro: Lista vazia");
+    }
+    NoCliente *noRemovido = fila->inicio;
+    fila->inicio = noRemovido->prox;
+    Cliente *clienteRemovido = noRemovido->cliente;
+    free(noRemovido);
+    fila->contador--;
+}
+
+Cliente *removerClientesDaFila(ListaCliente *fila)
+{
+    if (fila->contador == 0)
+    {
+        return NULL;
+    }
+    NoCliente *noRemovido = fila->inicio;
+    fila->inicio = noRemovido->prox;
+    Cliente *clienteRemovido = noRemovido->cliente;
+    free(noRemovido);
+    fila->contador--;
+    return clienteRemovido;
+}
+
+
+bool isFilaVazia(ListaCliente *fila){
+    return fila->contador == 0;
+}
 
 

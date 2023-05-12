@@ -2,40 +2,40 @@
 #include <stdlib.h>
 #include "produtos.c"
 #include "clientes.c"
+#include "funcionarios.c"
+#include "caixas.c"
 #include <time.h>
 
-void printClient(Cliente *cliente)
-{
-    printf("Cliente %d: %s", cliente->codigo, cliente->nome);
+#define FICH_PRODUTOS "produtos.txt"
+#define FICH_CLIENTES "clientes.txt"
+#define FICH_FUNCIONARIOS "funcionarios.txt"
+#define NUM_CAIXAS 10
+
+void simulacao(ListaProduto *listaProdutos, ListaCliente *listaClientes, ListaFuncionario *listaFuncionarios, ListaCaixa *listaCaixas){
+
 }
 
 int main(void)
 {
     srand(time(NULL));
-    ListaProduto *listaProdutos = leProdutos("produtos.txt");
-    Produto *sla = buscaProduto(listaProdutos, 51000);
-    printf("%s\n", sla->nome);
-    printf("%d", listaProdutos->contador);
-
-    // teste de clientes
-    printf("\n");
-    ListaCliente *listaClientes = leClientes("clientes.txt", listaProdutos);
-
-    // mostrar produtos que todos os clientes vao comprar
-    printf("\n");
-    NoCliente *atual = listaClientes->inicio;
-    while (atual != NULL)
-    {
-        printClient(atual->cliente);
-        printf("\n");
-        imprimeProdutos(atual->cliente->lista_compras);
-        printf("\n");
-        atual = atual->prox;
-    }
+    ListaProduto *listaProdutos = leProdutos(FICH_PRODUTOS);
+    ListaCliente *listaClientes = leClientes(FICH_CLIENTES,listaProdutos);
+    ListaFuncionario *listaFuncionarios = leFuncionarios(FICH_FUNCIONARIOS);
+    ListaCaixa *listaCaixas = criarCaixas(NUM_CAIXAS,listaFuncionarios);
+    printf("%d\n", listaCaixas->contador);
+    Caixa* caixa = buscaCaixa(listaCaixas,4);
+    imprimeFuncionarios(listaFuncionarios);
+    printf("%i\n", caixa->codigoCaixa);
+    printf("%s\n",caixa->funcionario->nome);
+    imprimeCaixas(listaCaixas);
 
 
+    
     liberaClientes(listaClientes);
     liberaProdutos(listaProdutos);
+    liberaFuncionarios(listaFuncionarios);
+    liberarCaixas(listaCaixa);
+    printf("acabouu");
 
     return 0;
 }

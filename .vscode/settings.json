@@ -4,7 +4,8 @@
     "produtos.h": "c",
     "stdio.h": "c",
     "cstdlib": "c",
-    "string.h": "c"
+    "string.h": "c",
+    "clientes.h": "c"
   },
   "cSpell.language": "pt,pt-PT,en-GB,en",
   "cSpell.enableFiletypes": ["apex", "apex-anon", "apexlog"],
