@@ -35,6 +35,7 @@ ListaCaixa *criarCaixas(int numCaixas, ListaFuncionario *listaFuncionario);
 NoCaixa *adicionaCaixaLista(NoCaixa *lista,  Caixa *caixa);
 void abrirCaixa(Caixa *caixa);
 void fecharCaixa(Caixa *caixa, ListaCaixa *caixas, int numCaixas);
+void mudarDeCaixa(Cliente *cliente, ListaCaixa *caixas, ListaCliente *filaAnterior);
 void adicionaClienteNaCaixa(Caixa *caixa, Cliente *cliente);
 void removerClienteFilaCaixaInicio(Caixa *caixa);
 ListaCaixa *criarListaCaixas();

@@ -99,10 +99,26 @@ void fecharCaixa(Caixa *caixa, ListaCaixa *caixas, int numCaixas)
     caixa->aberta = false;
 }
 
+void mudarDeCaixa(Cliente *cliente, ListaCaixa *caixas, ListaCliente *filaAnterior){
+    NoCaixa *noCaixa = caixas->inicio;
+    while (noCaixa != NULL)
+    {
+        //remover o cliente da fila onde esta e depois adiciona-lo na fila de outra caixa verificando se nao é a mesma
+        if (noCaixa->caixa->aberta && cliente->codigoCaixa!=noCaixa->caixa->codigoCaixa)
+        {
+            removerClienteDaFila(filaAnterior,cliente);
+            adicionaClienteNaCaixa(noCaixa->caixa, cliente);
+            printf("Cliente %d mudou de caixa %d para caixa %d\n", cliente->codigo, cliente->codigoCaixa, noCaixa->caixa->codigoCaixa);
+            break;
+        }
+    }
+}
+
 
 void adicionaClienteNaCaixa(Caixa *caixa, Cliente *cliente)
 {
     adicionarClienteFila(caixa->filaClientes, cliente);
+    cliente->codigoCaixa=caixa->codigoCaixa;
 }
 
 void removerClienteFilaCaixaInicio(Caixa *caixa)

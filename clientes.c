@@ -1,6 +1,5 @@
 #include "clientes.h"
-#define MIN_PRODUTOS 1
-#define MAX_PRODUTOS 10
+
 
 NoCliente *insereCliente(NoCliente *lista, Cliente *cliente)
 {
@@ -132,6 +131,7 @@ Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto)
     cliente->totalTempoCaixa = 0;
     cliente->totalTempoCompra = 0;
     cliente->lista_compras = NULL;
+    cliente->codigoCaixa= 0;
 
     cliente = produtosAComprar(cliente, listaProduto);
 
@@ -172,7 +172,7 @@ int gerarCodigoProdutoRand()
     i = rand() % num_intervalos;
     num_aleatorio = rand() % (intervalos[i][1] - intervalos[i][0] + 1) + intervalos[i][0];
     return num_aleatorio;
-}
+} 
 
 ListaCliente *criarListaClientes()
 {
@@ -192,6 +192,26 @@ void adicionarClienteFila(ListaCliente *fila, Cliente *cliente)
 {
     fila->inicio = insereCliente(fila->inicio, cliente);
     fila->contador++;
+}
+
+void removerClienteDaFila(ListaCliente *fila, Cliente *cliente){
+    NoCliente *noCliente = fila->inicio;
+
+    while (noCliente!=NULL)
+    {
+        if (noCliente->cliente->codigo == cliente->codigo)
+        {
+            NoCliente *noRemovido = noCliente;
+            noCliente = noCliente->prox;
+            free(noRemovido);
+            fila->contador--;
+        }
+        else
+        {
+            noCliente = noCliente->prox;
+        }
+    }
+    
 }
 
 void removerClienteFilaInicio(ListaCliente *fila)

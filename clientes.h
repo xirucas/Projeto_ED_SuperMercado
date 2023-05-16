@@ -1,6 +1,9 @@
 #ifndef CLIENTES_H
 #define CLIENTES_H
 
+#define MIN_PRODUTOS 1
+#define MAX_PRODUTOS 10
+
 #include "produtos.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +19,7 @@ typedef struct cliente
     float totalTempoCompra;
     float totalTempoCaixa;
     ListaProduto *lista_compras;
+    int codigoCaixa;
 } Cliente;
 
 typedef struct noCliente
@@ -43,6 +47,7 @@ int gerarCodigoProdutoRand();
 ListaCliente *criarListaClientes();
 Cliente *removerClientesDaFila(ListaCliente *fila);
 void adicionarClienteFila(ListaCliente *fila, Cliente *cliente);
+void removerClienteDaFila(ListaCliente *fila, Cliente *cliente);
 void removerClienteFilaInicio(ListaCliente *fila);
 bool isFilaVazia(ListaCliente *fila);
 

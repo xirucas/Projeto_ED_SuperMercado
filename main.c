@@ -11,9 +11,31 @@
 #define FICH_FUNCIONARIOS "funcionarios.txt"
 #define NUM_CAIXAS 10
 
-void simulacao(ListaProduto *listaProdutos, ListaCliente *listaClientes, ListaFuncionario *listaFuncionarios, ListaCaixa *listaCaixas){
+//simulacao assincrona
 
+void simulacao(ListaProduto *listaProdutos, ListaCliente *listaClientes, ListaFuncionario *listaFuncionarios, ListaCaixa *listaCaixas){
+    int escolha;
+    printf("1 - Simulacao Assincrona\n");
+    printf("2 - Simulacao Sincrona\n");
+    scanf("%d", &escolha);
+    switch (escolha)
+    {
+        case 1:
+            simulacaoAssincrona(listaProdutos, listaClientes, listaFuncionarios, listaCaixas);
+            break;
+        case 2:
+            simulacaoSincrona(listaProdutos, listaClientes, listaFuncionarios, listaCaixas);
+            break;
+        default:
+            printf("Opcao invalida\n");
+            break;
+
+            }
 }
+
+//simulacao sincrona
+void simulacaoAssincrona(ListaProduto *listaProdutos, ListaCliente *listaClientes, ListaFuncionario *listaFuncionarios, ListaCaixa *listaCaixas){
+    
 
 int main(void)
 {
@@ -34,7 +56,7 @@ int main(void)
     liberaClientes(listaClientes);
     liberaProdutos(listaProdutos);
     liberaFuncionarios(listaFuncionarios);
-    liberarCaixas(listaCaixa);
+    liberarCaixas(listaCaixas);
     printf("acabouu");
 
     return 0;
