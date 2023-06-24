@@ -4,52 +4,31 @@
 #include "clientes.c"
 #include "funcionarios.c"
 #include "caixas.c"
+#include "utils.c"
 #include <time.h>
 
 #define FICH_PRODUTOS "produtos.txt"
 #define FICH_CLIENTES "clientes.txt"
 #define FICH_FUNCIONARIOS "funcionarios.txt"
 #define NUM_CAIXAS 10
+#define HORA_ABERTURA "9:00:00"
 
-//simulacao assincrona
-
-void simulacao(ListaProduto *listaProdutos, ListaCliente *listaClientes, ListaFuncionario *listaFuncionarios, ListaCaixa *listaCaixas){
-    int escolha;
-    printf("1 - Simulacao Assincrona\n");
-    printf("2 - Simulacao Sincrona\n");
-    scanf("%d", &escolha);
-    switch (escolha)
-    {
-        case 1:
-            simulacaoAssincrona(listaProdutos, listaClientes, listaFuncionarios, listaCaixas);
-            break;
-        case 2:
-            simulacaoSincrona(listaProdutos, listaClientes, listaFuncionarios, listaCaixas);
-            break;
-        default:
-            printf("Opcao invalida\n");
-            break;
-
-            }
-}
-
-//simulacao sincrona
-void simulacaoAssincrona(ListaProduto *listaProdutos, ListaCliente *listaClientes, ListaFuncionario *listaFuncionarios, ListaCaixa *listaCaixas){
-    
 
 int main(void)
 {
+    Relogio rolex;
     srand(time(NULL));
     ListaProduto *listaProdutos = leProdutos(FICH_PRODUTOS);
     ListaCliente *listaClientes = leClientes(FICH_CLIENTES,listaProdutos);
     ListaFuncionario *listaFuncionarios = leFuncionarios(FICH_FUNCIONARIOS);
     ListaCaixa *listaCaixas = criarCaixas(NUM_CAIXAS,listaFuncionarios);
-    printf("%d\n", listaCaixas->contador);
-    Caixa* caixa = buscaCaixa(listaCaixas,4);
-    imprimeFuncionarios(listaFuncionarios);
-    printf("%i\n", caixa->codigoCaixa);
-    printf("%s\n",caixa->funcionario->nome);
-    imprimeCaixas(listaCaixas);
+    StartRelogio(&rolex,100,HORA_ABERTURA);
+    time_t hora= VerTimeRelogio(&rolex);
+    while (true)
+    {   
+       
+    }
+    
 
 
     

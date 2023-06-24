@@ -5,7 +5,8 @@
     "stdio.h": "c",
     "cstdlib": "c",
     "string.h": "c",
-    "clientes.h": "c"
+    "clientes.h": "c",
+    "time.h": "c"
   },
   "cSpell.language": "pt,pt-PT,en-GB,en",
   "cSpell.enableFiletypes": ["apex", "apex-anon", "apexlog"],
