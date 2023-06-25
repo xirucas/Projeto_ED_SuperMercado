@@ -29,6 +29,11 @@ NoCliente *insereCliente(NoCliente *lista, Cliente *cliente)
         return lista;
     }
 }
+void imprimeCliente(Cliente* cliente) {
+    printf("Código: %d\n", cliente->codigo);
+    printf("Nome: %s\n", cliente->nome);
+    // Imprima outros campos, se houver
+}
 void imprimeClientes(ListaCliente *lista)
 {
     NoCliente *atual = lista->inicio;

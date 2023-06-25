@@ -24,6 +24,25 @@ NoFuncionario *insereFuncionario(NoFuncionario *lista, Funcionario *funcionario)
         return lista;
     }
 }
+void imprimeFuncionario(Funcionario* funcionario) {
+    printf("Código: %d\n", funcionario->codigo);
+    printf("Nome: %s\n", funcionario->nome);
+    printf("Clientes atendidos: %d\n", funcionario->clientesAtendidos);
+    printf("Tempo de atendimento: %s\n", funcionario->tempoDeAtendimento);
+    printf("A Trabalhar: %d\n", funcionario->aTrabalhar);
+}
+
+    Funcionario* criarFuncionario(int codigo, const char* nome, int clientesAtendidos, int tempoDeAtendimento, bool aTrabalhar) {
+    Funcionario* funcionario = malloc(sizeof(Funcionario));
+    if (funcionario != NULL) {
+        funcionario->codigo = codigo;
+        strcpy(funcionario->nome, nome);
+        funcionario->clientesAtendidos = clientesAtendidos;
+        funcionario->tempoDeAtendimento = tempoDeAtendimento;
+        funcionario->aTrabalhar = aTrabalhar;
+    }
+    return funcionario;
+}
 void imprimeFuncionarios(ListaFuncionario *lista){
     NoFuncionario *atual = lista->inicio;
     while (atual != NULL)
@@ -46,6 +65,16 @@ void liberaFuncionarios(ListaFuncionario *lista){
         atual = prox;
     }
     free(lista);
+}
+Funcionario* buscaFuncionarioPorNome(ListaFuncionario* lista, char* nome) {
+    NoFuncionario* atual = lista->inicio;
+    while (atual != NULL) {
+        if (strcmp(atual->funcionario->nome, nome) == 0) {
+            return atual->funcionario;
+        }
+        atual = atual->prox;
+    }
+    return NULL;
 }
 Funcionario *buscaFuncionario(ListaFuncionario *lista, int codigo){
     NoFuncionario *atual = lista->inicio;
