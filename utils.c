@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
 //escrever em ficheiro csv
 void escreverFicheiroCSV(char *nomeFicheiro, char *texto)
 {

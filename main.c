@@ -215,29 +215,30 @@ void Clientes(ListaCliente *listaClientes)
     } while (menu_cliente != 6);
 }
 
-//caga nesta cena de simulaçao sou so testes ahah
+// caga nesta cena de simulaçao sou so testes ahah
 void simulacao(ListaCliente listaClientes, ListaCaixa listaCaixas, ListaFuncionario listaFuncionarios)
 {
     Relogio rolex;
     char tecla;
-    StartRelogio(&rolex,500,HORA_ABERTURA);
+    StartRelogio(&rolex, 60, HORA_ABERTURA);
     while (true)
     {
         if (kbhit())
         {
             tecla = getch();
-            while (tecla == 'q' || tecla == 'Q')
+            while (tecla != 'q' || tecla != 'Q')
             {
-                ch = '\0';
-                menuSimulacao();
-                while (ch != 'q' && ch != 'Q' && ch != 'm' && ch != 'M' && ch != '1' && ch != '2' && ch != '3' && ch != '4' && ch != '0')
+                StopRelogio(&rolex);
+                tecla = '\0';
+                menuSimulacao(rolex);
+                while (tecla != 'q' && tecla != 'Q' && tecla != 'm' && tecla != 'M' && tecla != '1' && tecla != '2' && tecla != '3' && tecla != '4' && tecla != '0')
                 {
                     if (kbhit)
                     {
-                        ch = getch();
-                        if (ch != 'q' && ch != 'Q' && ch != 'm' && ch != 'M' && ch != '1' && ch != '2' && ch != '3' && ch != '4' && ch != '0')
+                        tecla = getch();
+                        if (tecla != 'q' && tecla != 'Q' && tecla != 'm' && tecla != 'M' && tecla != '1' && tecla != '2' && tecla != '3' && tecla != '4' && tecla != '0')
                         {
-                            printf("\nOpção inválida.\nPrima M para apresentar o menu.");
+                            printf("\nOpção inválida.\nPrima M para voltar à simulação.");
                         }
                     }
                 }
@@ -246,16 +247,13 @@ void simulacao(ListaCliente listaClientes, ListaCaixa listaCaixas, ListaFunciona
                     printf("Simulação terminada");
                     break;
                 }
-                else if (ch == 'q' || ch == 'Q')
+                else if (tecla == 'm' || tecla == 'M')
                 {
-                    printf("Vontando para a simulação");
+                    ResumeRelogio(&rolex);
                     break;
                 }
-                else if (ch == 'm' || ch == 'M')
-                {
-                    menuSimulacao();
-                }
             }
+           
 
             /*else if (tecla == 'c')
             {
@@ -307,11 +305,21 @@ void simulacao(ListaCliente listaClientes, ListaCaixa listaCaixas, ListaFunciona
                 printf
         }*/
         }
+         printf("ai\n");
     }
+    
 }
-//e nisto tbm
-void menuSimulacao()
+// e nisto tbm
+void menuSimulacao(Relogio rolex)
 {
+    time_t hora = VerTimeRelogio(&rolex);
+    printf("----------Menu:-------------\n");
+    printf("HORA: %s\n", asctime(localtime(&hora)));
+    printf("1 - Consultar cliente (Ainda não está implementado)");
+    printf("\n2 - Consultar caixas (Ainda não está implementado)");
+    printf("\n3 - Consultar estatísticas (Ainda não está implementado)");
+    printf("\n0 - Sair da simulação");
+    printf("\n\nPrima M para voltar à simulação.");
 }
 
 int main(void)
@@ -359,7 +367,7 @@ int main(void)
             break;
         case 5:
             printf("Você escolheu a Iniciar Simulacao.\n");
-            // Faça alguma coisa para a opção 3
+            simulacao(*listaClientes, *listaCaixas, *listaFuncionarios);
             break;
         case 6:
             printf("Encerrando o programa.\n");
