@@ -5,18 +5,22 @@
 #include "funcionarios.c"
 #include "caixas.c"
 #include <time.h>
+#include <conio.h>
+#include "utils.c"
 
 #define FICH_PRODUTOS "produtos.txt"
 #define FICH_CLIENTES "clientes.txt"
 #define FICH_FUNCIONARIOS "funcionarios.txt"
 #define NUM_CAIXAS 10
+#define HORA_ABERTURA "9:00:00"
+#define HORA_DE_FECHO "22:00:00"
 
 void Funcionarios(ListaFuncionario *listaFuncionarios)
 {
 
     int menu_funcionarios;
     int id;
-    char* funcionario;
+    char *funcionario;
     do
     {
         printf("----------Funcionarios----------\n");
@@ -35,13 +39,16 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
             printf("Você escolheu Pesquisar por Nome de Funcionarios.\n");
             printf("------Insira o Nome do Funcionario:----\n");
             scanf("%s", &funcionario);
-            Funcionario* funcionarioEncontrado = buscaFuncionarioPorNome(listaFuncionarios, funcionario);
+            Funcionario *funcionarioEncontrado = buscaFuncionarioPorNome(listaFuncionarios, funcionario);
 
-            if (funcionarioEncontrado != NULL) {
+            if (funcionarioEncontrado != NULL)
+            {
                 printf("Funcionário encontrado!\n");
                 imprimeFuncionario(funcionarioEncontrado);
                 // Faça algo com o funcionário encontrado
-            } else {
+            }
+            else
+            {
                 printf("Funcionário não encontrado.\n");
             }
             break;
@@ -68,7 +75,7 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
             break;
         case 4:
             printf("Você escolheu Adicionar Funcionarios.\n");
-             printf("------Insira o Nome do Funcionario:----\n");
+            printf("------Insira o Nome do Funcionario:----\n");
             scanf("%s", &funcionario);
             break;
         case 5:
@@ -84,7 +91,6 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
 
     } while (menu_funcionarios != 6);
 }
-
 void Produtos(ListaProduto *listaProdutos)
 {
     int menu_produtos;
@@ -209,8 +215,108 @@ void Clientes(ListaCliente *listaClientes)
     } while (menu_cliente != 6);
 }
 
+//caga nesta cena de simulaçao sou so testes ahah
+void simulacao(ListaCliente listaClientes, ListaCaixa listaCaixas, ListaFuncionario listaFuncionarios)
+{
+    Relogio rolex;
+    char tecla;
+    StartRelogio(&rolex,500,HORA_ABERTURA);
+    while (true)
+    {
+        if (kbhit())
+        {
+            tecla = getch();
+            while (tecla == 'q' || tecla == 'Q')
+            {
+                ch = '\0';
+                menuSimulacao();
+                while (ch != 'q' && ch != 'Q' && ch != 'm' && ch != 'M' && ch != '1' && ch != '2' && ch != '3' && ch != '4' && ch != '0')
+                {
+                    if (kbhit)
+                    {
+                        ch = getch();
+                        if (ch != 'q' && ch != 'Q' && ch != 'm' && ch != 'M' && ch != '1' && ch != '2' && ch != '3' && ch != '4' && ch != '0')
+                        {
+                            printf("\nOpção inválida.\nPrima M para apresentar o menu.");
+                        }
+                    }
+                }
+                if (tecla == '0')
+                {
+                    printf("Simulação terminada");
+                    break;
+                }
+                else if (ch == 'q' || ch == 'Q')
+                {
+                    printf("Vontando para a simulação");
+                    break;
+                }
+                else if (ch == 'm' || ch == 'M')
+                {
+                    menuSimulacao();
+                }
+            }
+
+            /*else if (tecla == 'c')
+            {
+                printf("Cliente entrou na loja\n");
+                Cliente *cliente = criaClienteAleatorio(listaClientes);
+                printf("Cliente %d entrou na loja\n", cliente->id);
+                printf("Cliente %d está na fila\n", cliente->id);
+                insereClienteFila(listaCaixas, cliente);
+            }
+            else if (tecla == 'f')
+            {
+                printf("Cliente saiu da loja\n");
+                Cliente *cliente = removeClienteFila(listaCaixas);
+                printf("Cliente %d saiu da loja\n", cliente->id);
+                printf("Cliente %d está na fila\n", cliente->id);
+            }
+            else if (tecla == 'p')
+            {
+                printf("Cliente está a pagar\n");
+                Cliente *cliente = removeClienteFila(listaCaixas);
+                printf("Cliente %d está a pagar\n", cliente->id);
+                printf("Cliente %d está na fila\n", cliente->id);
+            }
+            else if (tecla == 'a')
+            {
+                printf("Cliente está a ser atendido\n");
+                Cliente *cliente = removeClienteFila(listaCaixas);
+                printf("Cliente %d está a ser atendido\n", cliente->id);
+                printf("Cliente %d está na fila\n", cliente->id);
+            }
+            else if (tecla == 't')
+            {
+                printf("Cliente está a terminar de ser atendido\n");
+                Cliente *cliente = removeClienteFila(listaCaixas);
+                printf("Cliente %d está a terminar de ser atendido\n", cliente->id);
+                printf("Cliente %d está na fila\n", cliente->id);
+            }
+            else if (tecla == 's')
+            {
+                printf("Cliente saiu da loja\n");
+                Cliente *cliente = removeClienteFila(listaCaixas);
+                printf("Cliente %d saiu da loja\n", cliente->id);
+                printf("Cliente %d está na fila\n", cliente->id);
+            }
+            else if (tecla == 'n')
+            {
+                printf("Cliente não entrou na loja\n");
+                Cliente *cliente = removeClienteFila(listaCaixas);
+                printf
+        }*/
+        }
+    }
+}
+//e nisto tbm
+void menuSimulacao()
+{
+}
+
 int main(void)
 {
+    srand(time(NULL));
     ListaProduto *listaProdutos = leProdutos(FICH_PRODUTOS);
     ListaCliente *listaClientes = leClientes(FICH_CLIENTES, listaProdutos);
     ListaFuncionario *listaFuncionarios = leFuncionarios(FICH_FUNCIONARIOS);
@@ -271,6 +377,5 @@ int main(void)
     liberarCaixas(listaCaixas);
     printf("acabouu");
 
-    srand(time(NULL));
     return 0;
 }
