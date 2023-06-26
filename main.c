@@ -11,9 +11,9 @@
 #define FICH_FUNCIONARIOS "funcionarios.txt"
 #define NUM_CAIXAS 10
 
-void Funcionarios()
+void Funcionarios(ListaFuncionario *listaFuncionarios)
 {
-    ListaFuncionario *listaFuncionarios = leFuncionarios(FICH_FUNCIONARIOS);
+
     int menu_funcionarios;
     int id;
     char* funcionario;
@@ -85,12 +85,11 @@ void Funcionarios()
     } while (menu_funcionarios != 6);
 }
 
-void Produtos()
+void Produtos(ListaProduto *listaProdutos)
 {
     int menu_produtos;
     int id;
     char Produto;
-    ListaProduto *listaProdutos = leProdutos(FICH_PRODUTOS);
     do
     {
 
@@ -144,10 +143,8 @@ void Produtos()
 
     } while (menu_produtos != 6);
 }
-void Clientes()
+void Clientes(ListaCliente *listaClientes)
 {
-    ListaProduto *listaProdutos = leProdutos(FICH_PRODUTOS);
-    ListaCliente *listaClientes = leClientes(FICH_CLIENTES, listaProdutos);
 
     int menu_cliente;
     int id;
@@ -235,16 +232,16 @@ int main(void)
         {
         case 1:
             printf("Você escolheu a Produtos.\n");
-            Produtos();
+            Produtos(listaProdutos);
             // Faça alguma coisa para a opção 1
             break;
         case 2:
             printf("Você escolheu a Clientes.\n");
-            Clientes();
+            Clientes(listaClientes);
             break;
         case 3:
             printf("Você escolheu a Caixas.\n");
-            Funcionarios();
+            Funcionarios(listaFuncionarios);
             break;
         case 4:
             printf("Você escolheu a Caixas.\n");
