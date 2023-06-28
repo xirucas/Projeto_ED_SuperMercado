@@ -1,6 +1,5 @@
 #include "clientes.h"
 
-
 NoCliente *insereCliente(NoCliente *lista, Cliente *cliente)
 {
     NoCliente *novoNo = (NoCliente *)malloc(sizeof(NoCliente));
@@ -29,7 +28,8 @@ NoCliente *insereCliente(NoCliente *lista, Cliente *cliente)
         return lista;
     }
 }
-void imprimeCliente(Cliente* cliente) {
+void imprimeCliente(Cliente *cliente)
+{
     printf("Código: %d\n", cliente->codigo);
     printf("Nome: %s\n", cliente->nome);
     // Imprima outros campos, se houver
@@ -74,10 +74,39 @@ Cliente *buscaCliente(ListaCliente *lista, int codigo)
     return NULL;
 }
 
+void retirarClienteDaLista(ListaCliente *lista, int codigo)
+{
+    NoCliente *atual = lista->inicio;
+    NoCliente *anterior = NULL;
+    while (atual != NULL)
+    {
+        if (atual->cliente->codigo == codigo)
+        {
+            if (anterior == NULL)
+            {
+                lista->inicio = atual->prox;
+            }
+            else
+            {
+                anterior->prox = atual->prox;
+            }
+            free(atual->cliente->lista_compras);
+            free(atual->cliente);
+            free(atual);
+            return;
+        }
+        anterior = atual;
+        atual = atual->prox;
+        lista->contador--;
+    }
+    return NULL;
+}
+
 Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
 {
     bool exist = false;
-
+    int codigo_produto;
+    Produto *produto;
     cliente->qtde_compras = MIN_PRODUTOS + rand() % (MAX_PRODUTOS - MIN_PRODUTOS + 1);
     cliente->lista_compras = criarListaProdutos();
 
@@ -86,23 +115,38 @@ Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto)
     {
         while (exist == false)
         {
-            int codigo_produto = gerarCodigoProdutoRand();
-            Produto *produto = buscaProduto(listaProduto, codigo_produto);
+            codigo_produto = gerarCodigoProdutoRand();
+            produto = buscaProduto(listaProduto, codigo_produto);
             if (produto != NULL)
             {
                 cliente->lista_compras->inicio = insereProduto(cliente->lista_compras->inicio, produto);
-                cliente->lista_compras->contador++;
+                cliente->lista_compras->contador += 1;
                 cliente->totalTempoCaixa += produto->tcaixa;
                 cliente->totalTempoCompra += produto->tcompra;
                 exist = true;
+                printf("cuuuu");
             }
         }
         exist = false;
     }
+
+    cliente->tempoCaixaRestante = cliente->totalTempoCaixa;
+    cliente->totalTempoCompra = cliente->totalTempoCompra;
     return cliente;
 }
 
-Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto)
+Cliente *resetStatsCliente(Cliente *cliente)
+{
+    cliente->qtde_compras = 0;
+    cliente->totalTempoCaixa = 0;
+    cliente->totalTempoCompra = 0;
+    cliente->tempoCaixaRestante = 0;
+    cliente->tempoCompraRestante = 0;
+    cliente->lista_compras = NULL;
+    cliente->codigoCaixa = 0;
+}
+
+Cliente *leCliente(FILE *arquivo)
 {
     Cliente *cliente = (Cliente *)malloc(sizeof(Cliente));
     char ch = '\0';
@@ -135,14 +179,14 @@ Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto)
     cliente->qtde_compras = 0;
     cliente->totalTempoCaixa = 0;
     cliente->totalTempoCompra = 0;
+    cliente->tempoCaixaRestante = 0;
+    cliente->tempoCompraRestante = 0;
     cliente->lista_compras = NULL;
-    cliente->codigoCaixa= 0;
-
-    cliente = produtosAComprar(cliente, listaProduto);
+    cliente->codigoCaixa = 0;
 
     return cliente;
 }
-ListaCliente *leClientes(char *nome_arquivo, ListaProduto *listaProduto)
+ListaCliente *leClientes(char *nome_arquivo)
 {
     FILE *arquivo = fopen(nome_arquivo, "r");
     if (arquivo == NULL)
@@ -154,7 +198,7 @@ ListaCliente *leClientes(char *nome_arquivo, ListaProduto *listaProduto)
     ListaCliente *lista = criarListaClientes();
     while (!feof(arquivo))
     {
-        Cliente *cliente = leCliente(arquivo, listaProduto);
+        Cliente *cliente = leCliente(arquivo);
         lista->inicio = insereCliente(lista->inicio, cliente);
         lista->contador++;
     }
@@ -177,7 +221,14 @@ int gerarCodigoProdutoRand()
     i = rand() % num_intervalos;
     num_aleatorio = rand() % (intervalos[i][1] - intervalos[i][0] + 1) + intervalos[i][0];
     return num_aleatorio;
-} 
+}
+
+int gerarCodigoClienteRand()
+{
+    // gerar entre 001037 e 999963
+    int num_aleatorio = (rand() % (999963 - 1037 + 1)) + 1037;
+    return num_aleatorio;
+}
 
 ListaCliente *criarListaClientes()
 {
@@ -199,10 +250,11 @@ void adicionarClienteFila(ListaCliente *fila, Cliente *cliente)
     fila->contador++;
 }
 
-void removerClienteDaFila(ListaCliente *fila, Cliente *cliente){
+void removerClienteDaFila(ListaCliente *fila, Cliente *cliente)
+{
     NoCliente *noCliente = fila->inicio;
 
-    while (noCliente!=NULL)
+    while (noCliente != NULL)
     {
         if (noCliente->cliente->codigo == cliente->codigo)
         {
@@ -216,7 +268,6 @@ void removerClienteDaFila(ListaCliente *fila, Cliente *cliente){
             noCliente = noCliente->prox;
         }
     }
-    
 }
 
 void removerClienteFilaInicio(ListaCliente *fila)
@@ -246,9 +297,7 @@ Cliente *removerClientesDaFila(ListaCliente *fila)
     return clienteRemovido;
 }
 
-
-bool isFilaVazia(ListaCliente *fila){
+bool isFilaVazia(ListaCliente *fila)
+{
     return fila->contador == 0;
 }
-
-

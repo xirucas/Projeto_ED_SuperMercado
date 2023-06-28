@@ -14,6 +14,7 @@ typedef struct caixa{
     ListaCliente *filaClientes;
     float tempoNaCaixa;
     int clientesAtendidos;
+    float tempoSemClientes;
     bool aberta;
 }Caixa;
 

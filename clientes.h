@@ -18,6 +18,8 @@ typedef struct cliente
     int qtde_compras;
     float totalTempoCompra;
     float totalTempoCaixa;
+    float tempoCaixaRestante;
+    float tempoCompraRestante;
     ListaProduto *lista_compras;
     int codigoCaixa;
 } Cliente;
@@ -38,11 +40,14 @@ NoCliente *insereCliente(NoCliente *lista, Cliente *cliente);
 void imprimeClientes(ListaCliente *lista);
 void liberaClientes(ListaCliente *lista);
 Cliente *buscaCliente(ListaCliente *lista, int codigo);
-Cliente *leCliente(FILE *arquivo, ListaProduto *listaProduto);
-ListaCliente *leClientes(char *nome_arquivo, ListaProduto *listaProduto);
+Cliente *leCliente(FILE *arquivo);
+ListaCliente *leClientes(char *nome_arquivo);
 
 Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto);
+Cliente *resetStatsCliente(Cliente *cliente);
+void retirarClienteDaLista(ListaCliente *lista, int codigo);
 int gerarCodigoProdutoRand();
+int gerarCodigoClienteRand();
 
 ListaCliente *criarListaClientes();
 Cliente *removerClientesDaFila(ListaCliente *fila);
