@@ -44,8 +44,6 @@ Cliente *leCliente(FILE *arquivo);
 ListaCliente *leClientes(char *nome_arquivo);
 
 Cliente *produtosAComprar(Cliente *cliente, ListaProduto *listaProduto);
-Cliente *resetStatsCliente(Cliente *cliente);
-void retirarClienteDaLista(ListaCliente *lista, int codigo);
 int gerarCodigoProdutoRand();
 int gerarCodigoClienteRand();
 

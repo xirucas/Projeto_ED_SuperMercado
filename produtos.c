@@ -123,3 +123,43 @@ ListaProduto *criarListaProdutos(){
     lista->contador = 0;
     return lista;
 }
+
+
+
+NoProduto *copiaListaProdutos(NoProduto *lista)
+{
+    NoProduto *novaLista = NULL;
+    NoProduto *ultimo = NULL;
+
+    NoProduto *atual = lista;
+    while (atual != NULL)
+    {
+        // Cria um novo nó e copia os valores do nó atual
+        NoProduto *novoNo = (NoProduto *)malloc(sizeof(NoProduto));
+        novoNo->produto = (Produto *)malloc(sizeof(Produto));
+        novoNo->produto->codigo = atual->produto->codigo;
+        strcpy(novoNo->produto->nome, atual->produto->nome);
+        novoNo->produto->preco = atual->produto->preco;
+        novoNo->produto->tcompra = atual->produto->tcompra;
+        novoNo->produto->tcaixa = atual->produto->tcaixa;
+
+        // Copie os outros campos do produto, se houver
+
+        novoNo->prox = NULL;
+
+        if (novaLista == NULL)
+        {
+            novaLista = novoNo;
+            ultimo = novoNo;
+        }
+        else
+        {
+            ultimo->prox = novoNo;
+            ultimo = novoNo;
+        }
+
+        atual = atual->prox;
+    }
+
+    return novaLista;
+}

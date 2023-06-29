@@ -49,8 +49,12 @@ void StopRelogio(Relogio *R) {
     R->STOP = VerTimeRelogio(R);
 }
 
-void WaitSegundos(Relogio *R, int s)
-{
-     int tempoEspera = (s * 1000000) / R->VELOCIDADE; // tempoEspera está em microssegundos
-    usleep(tempoEspera);
+void WaitSegundos(int s) {
+    clock_t T0 = clock();
+    clock_t T1 = T0 + s;
+    while (clock() < T1);
+}
+
+void Wait(int s) {
+    WaitSegundos(s * CLOCKS_PER_SEC);
 }

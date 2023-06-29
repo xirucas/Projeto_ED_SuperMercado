@@ -31,4 +31,6 @@ Produto *leProduto(FILE *arquivo);
 ListaProduto *leProdutos(char *nome_arquivo);
 ListaProduto *criarListaProdutos();
 
+NoProduto *copiaListaProdutos(NoProduto *lista);
+
 #endif

@@ -12,7 +12,6 @@ Caixa *criarCaixa(int codigoCaixa, Funcionario *funcionario)
     caixa->funcionario = funcionario;
     caixa->filaClientes = criarListaClientes();
     caixa->tempoNaCaixa = 0;
-    caixa->tempoSemClientes = 0;
     caixa->clientesAtendidos=0;
     caixa->aberta = false;
     return caixa;
@@ -81,21 +80,20 @@ void fecharCaixa(Caixa *caixa, ListaCaixa *caixas, int numCaixas)
         {
             Cliente *cliente = removerClientesDaFila(caixa->filaClientes);
             printf("Cliente %d saiu da fila do caixa %d\n", cliente->codigo, caixa->codigoCaixa);
-            
-                Caixa *caixaNova;
-                while (caixaNova!=NULL)
+            for (int i = 1; i <= numCaixas; i++)
+            {
+                NoCaixa *noCaixa;
+                while (noCaixa!=NULL)
                 {
-                    int codigoCaixa = rand() % (numCaixas - 1 + 1) + 1;
-                    caixaNova = buscaCaixa(caixas,codigoCaixa);
-                    if (caixaNova->aberta)
+                    if (noCaixa->caixa->aberta)
                     {
-                        adicionaClienteNaCaixa(caixaNova, cliente);
-                        printf("Cliente %d entrou na fila da caixa %d\n", cliente->codigo, caixaNova->codigoCaixa);
+                        adicionaClienteNaCaixa(noCaixa->caixa, cliente);
+                        printf("Cliente %d entrou na fila da caixa %d\n", cliente->codigo, noCaixa->caixa->codigoCaixa);
                         break;
                     }
-                   
+                    noCaixa = noCaixa->prox;
                 }
-            
+            }
         }
     }
     caixa->aberta = false;

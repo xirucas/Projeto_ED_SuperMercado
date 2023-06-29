@@ -219,17 +219,17 @@ void Clientes(ListaCliente *listaClientes)
 }
 
 // caga nesta cena de simulaçao sou so testes ahah
-void simulacao(ListaCliente *listaClientes, ListaCaixa *listaCaixas, ListaFuncionario *listaFuncionarios, ListaProduto *listaProdutos)
+void simulacao(ListaCliente *listaClientes, ListaCaixa *listaCaixas, ListaProduto *listaProdutos)
 {
-    ListaCliente *clientesEmLoja = criarListaClientes();
     Relogio rolex;
+    ListaCliente *clientesEmLoja = criarListaClientes();
     char texto[100];
+    int random;
     int clientesAtendidos = 0;
     float tempoMedioEspera = 0.0;
     int caixasAbertas = 0;
     char tecla;
     StartRelogio(&rolex, 120, HORA_ABERTURA);
-
     while (true)
     {
         if (kbhit())
@@ -262,68 +262,24 @@ void simulacao(ListaCliente *listaClientes, ListaCaixa *listaCaixas, ListaFuncio
                     break;
                 }
             }
-
-            /*else if (tecla == 'c')
-            {
-                printf("Cliente entrou na loja\n");
-                Cliente *cliente = criaClienteAleatorio(listaClientes);
-                printf("Cliente %d entrou na loja\n", cliente->id);
-                printf("Cliente %d está na fila\n", cliente->id);
-                insereClienteFila(listaCaixas, cliente);
-            }
-            else if (tecla == 'f')
-            {
-                printf("Cliente saiu da loja\n");
-                Cliente *cliente = removeClienteFila(listaCaixas);
-                printf("Cliente %d saiu da loja\n", cliente->id);
-                printf("Cliente %d está na fila\n", cliente->id);
-            }
-            else if (tecla == 'p')
-            {
-                printf("Cliente está a pagar\n");
-                Cliente *cliente = removeClienteFila(listaCaixas);
-                printf("Cliente %d está a pagar\n", cliente->id);
-                printf("Cliente %d está na fila\n", cliente->id);
-            }
-            else if (tecla == 'a')
-            {
-                printf("Cliente está a ser atendido\n");
-                Cliente *cliente = removeClienteFila(listaCaixas);
-                printf("Cliente %d está a ser atendido\n", cliente->id);
-                printf("Cliente %d está na fila\n", cliente->id);
-            }
-            else if (tecla == 't')
-            {
-                printf("Cliente está a terminar de ser atendido\n");
-                Cliente *cliente = removeClienteFila(listaCaixas);
-                printf("Cliente %d está a terminar de ser atendido\n", cliente->id);
-                printf("Cliente %d está na fila\n", cliente->id);
-            }
-            else if (tecla == 's')
-            {
-                printf("Cliente saiu da loja\n");
-                Cliente *cliente = removeClienteFila(listaCaixas);
-                printf("Cliente %d saiu da loja\n", cliente->id);
-                printf("Cliente %d está na fila\n", cliente->id);
-            }
-            else if (tecla == 'n')
-            {
-                printf("Cliente não entrou na loja\n");
-                Cliente *cliente = removeClienteFila(listaCaixas);
-                printf
-        }*/
         }
 
-        // se for hora de fecho, termina a simulação
         time_t simulacao = VerTimeRelogio(&rolex);
         struct tm *tempo = localtime(&simulacao);
+
+        random = rand() % 100;
+
+        if (tempo->tm_hour > 19 && tempo->tm_min >= 30)
+        {
+            printf("A loja irá fechar mais nenhum cliente entra");
+            random = 0;
+        }
+
         if (tempo->tm_hour >= 21 && tempo->tm_min >= 00)
         {
             printf("Simulação terminada\n");
             break;
         }
-
-        printf("eu");
 
         // abrir caixa se nao houver nenhuma aberta
         if (caixasAbertas == 0)
@@ -344,8 +300,6 @@ void simulacao(ListaCliente *listaClientes, ListaCaixa *listaCaixas, ListaFuncio
             escreverFicheiroCSV(FICH_CSV, texto);
         }
 
-        printf("tu");
-
         // atualiza tempos de espera nas caixas sem clientes
         if (caixasAbertas < 1)
         {
@@ -361,151 +315,151 @@ void simulacao(ListaCliente *listaClientes, ListaCaixa *listaCaixas, ListaFuncio
             }
         }
 
-        printf("nois;");
+        printf("%d", random);
 
-        // gerar num random 0 a 99
-        int random = rand() % 100;
-
-        if (random < 40)
+        // entrada de cliente na loja
+        if (random < 65)
         {
-            // entrada de cliente
             Cliente *cliente = NULL;
-            int cod_cliente;
             while (cliente == NULL)
             {
-                
-                cod_cliente = gerarCodigoClienteRand();
-                cliente = buscaCliente(listaClientes, cod_cliente);
+                // alterar gerador do codigo
+                int codigoCliente = gerarCodigoClienteRand();
+                cliente = buscaCliente(listaClientes, codigoCliente);
                 if (cliente != NULL)
                 {
-                    printf("\nconaaaa %d\n", cliente->codigo);
                     cliente = produtosAComprar(cliente, listaProdutos);
-                    printf("coninha\n");
                 }
             }
-            
+
             clientesEmLoja->inicio = insereCliente(clientesEmLoja->inicio, cliente);
             clientesEmLoja->contador++;
-            printf("Cliente %d entrou na loja\n", cliente->codigo);
-            sprintf(texto, "Cliente %d entrou na loja\n", cliente->codigo);
+            printf("Entrou na loja o cliente %d\n", cliente->codigo);
+            sprintf(texto, "Entrou na loja o cliente %d\n", cliente->codigo);
             escreverFicheiroCSV(FICH_CSV, texto);
         }
-
-        printf("bota");
-
-        NoCliente *NO = clientesEmLoja->inicio;
-        while (NO != NULL)
+        printf("eu\n");
+        // verifica se ja passou o tempo do cliente comprar e adiciona o cliente em uma caixa
+        if (clientesEmLoja->contador >= 1)
         {
-            Cliente *cliente = (Cliente *)NO->cliente;
-            if (cliente->codigoCaixa == 0)
+            NoCliente *noCliente = clientesEmLoja->inicio;
+            while (noCliente != NULL)
             {
-                if (cliente->tempoCompraRestante > 0)
+                Cliente *cliente = noCliente->cliente;
+                if (cliente->codigoCaixa == 0)
                 {
-                    cliente->tempoCompraRestante == cliente->tempoCompraRestante - 120;
-                }
-                else if (cliente->tempoCompraRestante <= 0)
-                {
-                    Caixa *caixa = NULL;
-                    while (caixa == NULL)
+                    if (cliente->tempoCompraRestante > 0)
                     {
-                        int codigoCaixa = rand() % (NUM_CAIXAS - 1 + 1) + 1;
-                        caixa = buscaCaixa(listaCaixas, codigoCaixa);
-                        if (caixa->aberta == true)
+                        cliente->tempoCompraRestante = -120;
+                    }
+                    else if (cliente->tempoCompraRestante <= 0)
+                    {
+                        Caixa *caixa = NULL;
+                        while (caixa == NULL)
                         {
-                            adicionaClienteNaCaixa(caixa, cliente);
-                            printf("Cliente %d foi para a caixa %d\n", cliente->codigo, caixa->codigoCaixa);
-                            sprintf(texto, "Cliente %d foi para a caixa %d\n", cliente->codigo, caixa->codigoCaixa);
-                            escreverFicheiroCSV(FICH_CSV, texto);
+                            int codigoCaixa = rand() % (NUM_CAIXAS - 1 + 1) + 1;
+                            caixa = buscaCaixa(listaCaixas, codigoCaixa);
+                            if (caixa->aberta == true)
+                            {
+                                adicionaClienteNaCaixa(caixa, cliente);
+                                printf("Cliente %d foi para a caixa %d\n", cliente->codigo, caixa->codigoCaixa);
+                                sprintf(texto, "Cliente %d foi para a caixa %d\n", cliente->codigo, caixa->codigoCaixa);
+                                escreverFicheiroCSV(FICH_CSV, texto);
+                            }
                         }
                     }
                 }
+                noCliente = noCliente->prox;
             }
-            NO = NO->prox;
         }
-
-        printf("nela ");
-
-        // verificar se vai fechar alguma caixa por falta de clientes
-        if (caixasAbertas > 1)
+        printf("tu\n");
+        // verificar se alguma caixa fecha por falta de clientes
+        if (caixasAbertas > 2)
         {
             NoCaixa *noCaixa = listaCaixas->inicio;
             while (noCaixa != NULL)
             {
-                Caixa *caixa = (Caixa *)noCaixa->caixa;
-                if (caixa->aberta == true && caixa->filaClientes->contador == 0 && caixa->tempoSemClientes >= TEMPO_MAX_SEM_CLIENTES)
+                Caixa *caixa = noCaixa->caixa;
+                if (caixa->aberta == true && caixa->filaClientes->inicio != NULL)
                 {
-                    fecharCaixa(caixa, listaCaixas, NUM_CAIXAS);
-                    caixasAbertas--;
-                    printf("Caixa %d fechou\n", caixa->codigoCaixa);
-                    sprintf(texto, "Caixa %d fechou\n", caixa->codigoCaixa);
-                    escreverFicheiroCSV(FICH_CSV, texto);
+                    caixa->tempoSemClientes = caixa->tempoSemClientes + 120;
+                    if (caixa->tempoSemClientes >= TEMPO_MAX_SEM_CLIENTES)
+                    {
+                        caixa->aberta = false;
+                        caixasAbertas--;
+                        printf("Caixa %d fechou\n", caixa->codigoCaixa);
+                        sprintf(texto, "Caixa %d fechou\n", caixa->codigoCaixa);
+                        escreverFicheiroCSV(FICH_CSV, texto);
+                    }
                 }
                 noCaixa = noCaixa->prox;
             }
         }
-
-        printf("tua");
-
+        printf("nois\n");
         // fazer atendimento dos clientes em cada caixa
-        NoCaixa *noCaixaA = listaCaixas->inicio;
-        while (noCaixaA != NULL)
+        if (clientesEmLoja->contador >= 1)
         {
-            Caixa *caixa = (Caixa *)noCaixaA->caixa;
-            if (caixa->aberta == true && caixa->filaClientes->contador > 0)
+            NoCaixa *noCaixa = listaCaixas->inicio;
+            while (noCaixa != NULL)
             {
-                Cliente *cliente = (Cliente *)caixa->filaClientes->inicio->cliente;
-                if (cliente->tempoCaixaRestante > 0)
+                Caixa *caixa = noCaixa->caixa;
+                if (caixa->aberta == true && caixa->filaClientes->inicio != NULL)
                 {
-                    printf("Cliente %d a ser atendido na caixa %d\n", cliente->codigo, caixa->codigoCaixa);
-                    sprintf(texto, "Cliente %d a ser atendido na caixa %d\n", cliente->codigo, caixa->codigoCaixa);
-                    escreverFicheiroCSV(FICH_CSV, texto);
-                    cliente->tempoCaixaRestante = cliente->tempoCaixaRestante - 120;
+                    Cliente *cliente = caixa->filaClientes->inicio->cliente;
+                    if (cliente->tempoCaixaRestante > 0)
+                    {
+                        printf("Cliente %d a ser atendido na caixa %d\n", cliente->codigo, caixa->codigoCaixa);
+                        sprintf(texto, "Cliente %d a ser atendido na caixa %d\n", cliente->codigo, caixa->codigoCaixa);
+                        escreverFicheiroCSV(FICH_CSV, texto);
+                        cliente->tempoCaixaRestante = -120;
+                    }
+                    else if (cliente->tempoCaixaRestante <= 0)
+                    {
+                        removerClienteFilaCaixaInicio(caixa);
+                        printf("Cliente %d saiu da caixa %d\n", cliente->codigo, caixa->codigoCaixa);
+                        sprintf(texto, "Cliente %d saiu da caixa %d\n", cliente->codigo, caixa->codigoCaixa);
+                        escreverFicheiroCSV(FICH_CSV, texto);
+                    }
                 }
-                else if (cliente->tempoCaixaRestante <= 0)
-                {
-                    removerClienteFilaCaixaInicio(buscaCaixa(listaCaixas, cliente->codigoCaixa));
-
-                    printf("Cliente %d saiu da loja\n", cliente->codigo);
-                    sprintf(texto, "Cliente %d saiu da loja\n", cliente->codigo);
-                    retirarClienteDaLista(clientesEmLoja, cliente->codigo);
-                    resetStatsCliente(cliente);
-                    escreverFicheiroCSV(FICH_CSV, texto);
-                }
+                noCaixa = noCaixa->prox;
             }
-            noCaixaA = noCaixaA->prox;
         }
-
-        // verificar se têm que abrir caixas
+        printf("bota\n");
+        // verifica se é preciso abrir uma caixa
         if (caixasAbertas < NUM_CAIXAS)
         {
             NoCaixa *noCaixa = listaCaixas->inicio;
             while (noCaixa != NULL)
             {
-                Caixa *caixa = (Caixa *)noCaixa->caixa;
+                Caixa *caixa = noCaixa->caixa;
                 if (caixa->aberta == true && caixa->filaClientes->contador >= CLIENTES_MAX_POR_CAIXA)
                 {
                     Caixa *caixa2 = NULL;
                     while (caixa2 == NULL)
                     {
-                        // gerar codigo entre 1 e o numero maximo de caixas
                         int codigoCaixa = rand() % (NUM_CAIXAS - 1 + 1) + 1;
                         caixa2 = buscaCaixa(listaCaixas, codigoCaixa);
-                        if (caixa2->aberta)
+                        if (caixa2->aberta == false)
+                        {
+                            caixa2->aberta = true;
+                            caixasAbertas++;
+                            printf("Caixa %d abriu\n", caixa2->codigoCaixa);
+                            sprintf(texto, "Caixa %d abriu\n", caixa2->codigoCaixa);
+                            escreverFicheiroCSV(FICH_CSV, texto);
+                            break;
+                        }
+                        else
                         {
                             caixa2 = NULL;
                         }
                     }
-                    caixa2->aberta == true;
-                    caixasAbertas++;
-                    printf("Caixa %d abriu\n", caixa2->codigoCaixa);
-                    sprintf(texto, "Caixa %d abriu\n", caixa2->codigoCaixa);
-                    escreverFicheiroCSV(FICH_CSV, texto);
-                    break;
                 }
                 noCaixa = noCaixa->prox;
             }
         }
-        printf("cuu");
+        printf("nela\n");
+
+        WaitSegundos(500);
     }
     liberaClientes(clientesEmLoja);
 }
@@ -567,7 +521,7 @@ int main(void)
             break;
         case 5:
             printf("Você escolheu a Iniciar Simulacao.\n");
-            simulacao(listaClientes, listaCaixas, listaFuncionarios, listaProdutos);
+            simulacao(listaClientes, listaCaixas, listaProdutos);
             break;
         case 6:
             printf("Encerrando o programa.\n");
