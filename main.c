@@ -98,8 +98,7 @@ void Produtos(ListaProduto *listaProdutos)
         case 1:
             break;
         case 2:
-            printf("Você escolheu Mostrar Produtos.\n");
-            imprimeProdutos(listaProdutos);
+
             break;
         case 3:
             printf("Você escolheu Adicionar Produtos.\n");
@@ -461,10 +460,10 @@ int main(void)
     do
     {
         printf("----------Menu:-------------\n");
-        printf("1.................. Produtos\n");
+        printf("1.......... Mostrar Produtos\n");
         printf("2.................. Clientes\n");
         printf("3.............. Funcionarios\n");
-        printf("4.................... Caixas\n");
+        printf("4............ Mostrar Caixas\n");
         printf("5......... Iniciar Simulacao\n");
         printf("6...................... Sair\n");
         printf("------Escolha uma opção:----\n");
@@ -473,9 +472,8 @@ int main(void)
         switch (menu)
         {
         case 1:
-            printf("Você escolheu a Produtos.\n");
-            Produtos(listaProdutos);
-            // Faça alguma coisa para a opção 1
+            printf("Você escolheu Mostrar Produtos.\n");
+            imprimeProdutos(listaProdutos);
             break;
         case 2:
             printf("Você escolheu a Clientes.\n");
