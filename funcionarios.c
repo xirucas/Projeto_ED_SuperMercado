@@ -24,6 +24,30 @@ NoFuncionario *insereFuncionario(NoFuncionario *lista, Funcionario *funcionario)
         return lista;
     }
 }
+void adicionarFuncionario(Funcionario **listaFuncionarios) {
+    // Aloca memória para um novo funcionário
+    Funcionario *novoFuncionario = (Funcionario *)malloc(sizeof(Funcionario));
+    // Solicita o código do funcionário
+    printf("Insira o código do funcionário: ");
+    scanf("%d", &(novoFuncionario->codigo));
+
+    // Solicita o nome do funcionário
+    printf("Insira o nome do funcionário: ");
+    scanf("%s", novoFuncionario->nome);
+
+    // Define valores iniciais para os demais campos
+    novoFuncionario->clientesAtendidos = 0;
+    novoFuncionario->tempoDeAtendimento = 0;
+    novoFuncionario->aTrabalhar = false;
+    
+
+    adicionarFuncionarioFila(listaFuncionarios,novoFuncionario);
+
+    printf("Funcionário adicionado com sucesso!\n");
+
+    // Libera a memória alocada para o novo funcionário
+    free(novoFuncionario);
+}
 void imprimeFuncionario(Funcionario* funcionario) {
     printf("Código: %d\n", funcionario->codigo);
     printf("Nome: %s\n", funcionario->nome);
@@ -129,4 +153,43 @@ ListaFuncionario *leFuncionarios(char *nome_arquivo){
 
 int gerarCodigoFuncionarioRand(){
     return 1000 + rand() % (9999 - 1000 + 1);
+}
+void adicionarFuncionarioFila(ListaFuncionario *fila, Funcionario *Funcionario)
+{
+    fila->inicio = insereFuncionario(fila->inicio, Funcionario);
+    fila->contador++;
+}
+void removerFuncionarioLista(Funcionario **lista, int codigo)
+{
+    Funcionario *atual = *lista;
+    Funcionario *anterior = NULL;
+
+    // Procurar o funcionário na lista
+    while (atual != NULL && atual->codigo != codigo)
+    {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    // Verificar se o funcionário foi encontrado
+    if (atual == NULL)
+    {
+        printf("Funcionário não encontrado.\n");
+        return;
+    }
+
+    // Remover o funcionário da lista
+    if (anterior == NULL)
+    {
+        // O funcionário a ser removido é o primeiro da lista
+        *lista = atual->prox;
+    }
+    else
+    {
+        // O funcionário a ser removido não é o primeiro da lista
+        anterior->prox = atual->prox;
+    }
+
+    // Liberar a memória alocada para o funcionário removido
+    free(atual);
 }

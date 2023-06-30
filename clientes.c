@@ -1,5 +1,20 @@
 #include "clientes.h"
 
+Cliente* criarCliente(int codigo, const char* nome) {
+    Cliente* cliente = malloc(sizeof(Cliente));
+    if (cliente != NULL) {
+        cliente->codigo = codigo;
+        strcpy(cliente->nome, nome);
+        cliente->qtde_compras = 0;
+        cliente->totalTempoCompra = 0.0;
+        cliente->totalTempoCaixa = 0.0;
+        cliente->tempoCaixaRestante = 0.0;
+        cliente->tempoCompraRestante = 0.0;
+        cliente->lista_compras = NULL;
+        cliente->codigoCaixa = 0;
+    }
+    return cliente;
+}
 
 NoCliente *insereCliente(NoCliente *lista, Cliente *cliente)
 {

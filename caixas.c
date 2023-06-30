@@ -167,6 +167,14 @@ void imprimeCaixas(ListaCaixa *listaCaixas)
         noCaixa = noCaixa->prox;
     }
 }
+void imprimeCaixas(Caixa *Caixa)
+{
+        printf("Caixa %d\n", Caixa->codigoCaixa);
+        printf("Funcionario %d\n",Caixa->funcionario->codigo);
+        printf("Fila de clientes: ");
+        imprimeClientes(Caixa->filaClientes);
+        printf("\n");
+}
 
 void liberarCaixas(ListaCaixa *listaCaixa){
     NoCaixa *atual = listaCaixa->inicio;

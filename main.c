@@ -27,7 +27,6 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
     do
     {
         printf("----------Funcionarios----------\n");
-        printf("1........ Pesquisar por Nome\n");
         printf("2.......... Pesquisar por ID\n");
         printf("3.......... Mostrar Funcionarios\n");
         printf("4......... Adicionar Funcionarios\n");
@@ -39,26 +38,7 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
         switch (menu_funcionarios)
         {
         case 1:
-            printf("Você escolheu Pesquisar por Nome de Funcionarios.\n");
-            printf("------Insira o Nome do Funcionario:----\n");
-            scanf("%s", &funcionario);
-            Funcionario *funcionarioEncontrado = buscaFuncionarioPorNome(listaFuncionarios, funcionario);
-
-            if (funcionarioEncontrado != NULL)
-            {
-                printf("Funcionário encontrado!\n");
-                imprimeFuncionario(funcionarioEncontrado);
-                // Faça algo com o funcionário encontrado
-            }
-            else
-            {
-                printf("Funcionário não encontrado.\n");
-            }
-            break;
-        case 2:
-            printf("Você escolheu Pesquisar por ID de Funcionarios.\n");
-            printf("------Insira um id:----\n");
-            scanf("%d", &id);
+         printf("Você escolheu Pesquisar por ID de Funcionarios.\n");
 
             Funcionario *funcionarioencontradoid = buscaFuncionario(listaFuncionarios, id);
 
@@ -72,19 +52,21 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
                 printf("Funcionario não encontrado.\n");
             }
             break;
-        case 3:
+        case 2:
             printf("Você escolheu Mostrar Funcionarios.\n");
             imprimeFuncionarios(listaFuncionarios);
             break;
-        case 4:
+        case 3:
             printf("Você escolheu Adicionar Funcionarios.\n");
-            printf("------Insira o Nome do Funcionario:----\n");
-            scanf("%s", &funcionario);
+            adicionarFuncionario(listaFuncionarios);
+            break;
+        case 4:
+            printf("Você escolheu Remover Funcionarios.\n");
+            printf("------Insira um id para remover o funcionario :----\n");
+            scanf("%d", &id);
+            removerFuncionarioLista(listaFuncionarios,id);
             break;
         case 5:
-            printf("Você escolheu Remover Funcionarios.\n");
-            break;
-        case 6:
             printf("Voltando ao Menu Principal.\n");
             break;
         default:
@@ -92,7 +74,7 @@ void Funcionarios(ListaFuncionario *listaFuncionarios)
             break;
         }
 
-    } while (menu_funcionarios != 6);
+    } while (menu_funcionarios != 5);
 }
 void Produtos(ListaProduto *listaProdutos)
 {
@@ -103,46 +85,30 @@ void Produtos(ListaProduto *listaProdutos)
     {
 
         printf("----------Produtos----------\n");
-        printf("1........ Pesquisar por Nome\n");
-        printf("2.......... Pesquisar por ID\n");
-        printf("3.......... Mostrar Produtos\n");
-        printf("4......... Adicionar Produtos\n");
-        printf("5........... Remover Produtos\n");
-        printf("6............ Voltar ao Menu\n");
+        printf("1.......... Pesquisar por ID\n");
+        printf("2.......... Mostrar Produtos\n");
+        printf("3......... Adicionar Produtos\n");
+        printf("4........... Remover Produtos\n");
+        printf("5............ Voltar ao Menu\n");
         printf("------Escolha uma opção:----\n");
         scanf("%d", &menu_produtos);
 
         switch (menu_produtos)
         {
         case 1:
-            printf("Você escolheu Pesquisar por Nome de Produto.\n");
-            //   printf("------Insira o Nome do Produto:----\n");
-            //   scanf("%d", &Produto);
-            //
-            //   Produto* ProdutoEncontrado = buscaProdutoNome(listaProdutos, Produto);
-            //
-            //   if (ProdutoEncontrado != NULL) {
-            //       printf("O Produto encontrado foi:\n");
-            //       imprimeProdutos(ProdutoEncontrado);
-            //   } else {
-            //       printf("Produto não encontrado.\n");
-            //   }
             break;
         case 2:
-            printf("Você escolheu Pesquisar por ID de Produto.\n");
-            break;
-        case 3:
             printf("Você escolheu Mostrar Produtos.\n");
             imprimeProdutos(listaProdutos);
             break;
-        case 4:
+        case 3:
             printf("Você escolheu Adicionar Produtos.\n");
             // insereProduto();
             break;
-        case 5:
+        case 4:
             printf("Você escolheu Remover Produtos.\n");
             break;
-        case 6:
+        case 5:
             printf("Voltando ao Menu Principal.\n");
             break;
         default:
@@ -150,40 +116,36 @@ void Produtos(ListaProduto *listaProdutos)
             break;
         }
 
-    } while (menu_produtos != 6);
+    } while (menu_produtos != 5);
 }
 void Clientes(ListaCliente *listaClientes)
 {
 
     int menu_cliente;
-    int id;
+    int id,codigo;
     char C;
     char nome;
+    Cliente *cliente, *clienteEncontrado;
 
     do
     {
         printf("----------CLIENTES----------\n");
-        printf("1........ Pesquisar por Nome\n");
-        printf("2.......... Pesquisar por ID\n");
-        printf("3.......... Mostrar Clientes\n");
-        printf("4......... Adicionar Cliente\n");
-        printf("5........... Remover Cliente\n");
-        printf("6............ Voltar ao Menu\n");
+        printf("1.......... Pesquisar por ID\n");
+        printf("2.......... Mostrar Clientes\n");
+        printf("3......... Adicionar Cliente\n");
+        printf("4........... Remover Cliente\n");
+        printf("5............ Voltar ao Menu\n");
         printf("------Escolha uma opção:----\n");
         scanf("%d", &menu_cliente);
 
         switch (menu_cliente)
         {
         case 1:
-            printf("Você escolheu Pesquisar por Nome.\n");
-            // Faça alguma coisa para a opção 1
-            break;
-        case 2:
             printf("Você escolheu Pesquisar por ID.\n");
             printf("------Insira um id:----\n");
             scanf("%d", &id);
 
-            Cliente *clienteEncontrado = buscaCliente(listaClientes, id);
+            clienteEncontrado = buscaCliente(listaClientes, id);
 
             if (clienteEncontrado != NULL)
             {
@@ -194,20 +156,32 @@ void Clientes(ListaCliente *listaClientes)
             {
                 printf("Cliente não encontrado.\n");
             }
-            // Faça alguma coisa para a opção 2
             break;
-        case 3:
+        case 2:
             printf("Você escolheu Mostrar Clientes.\n");
             imprimeClientes(listaClientes);
             break;
-        case 4:
+        case 3:
             printf("Você escolheu Adicionar Cliente.\n");
+            char *novonome[150];
+            printf("--Insira o nome do Cliente--\n");
+            scanf("%s", &novonome);
+            codigo = gerarCodigoClienteRand();
+            cliente = criarCliente(codigo,novonome);
+            adicionarClienteFila(listaClientes,cliente);
+            printf("--O cliente foi adicionado --\n");
+            break;
+        case 4:
+            printf("Você escolheu Remover Cliente.\n");
+            printf("-Insira o id do cliente que quer remover:-\n");
+            scanf("%d", &id);
+
+            clienteEncontrado = buscaCliente(listaClientes, id);
+
+            removerClienteDaFila(listaClientes,clienteEncontrado);
+            printf("-Ocliente foi removido:-\n");
             break;
         case 5:
-            printf("Você escolheu Remover Cliente.\n");
-            // Faça alguma coisa para a opção 3
-            break;
-        case 6:
             printf("Voltando ao Menu Principal.\n");
             break;
         default:
@@ -215,7 +189,7 @@ void Clientes(ListaCliente *listaClientes)
             break;
         }
 
-    } while (menu_cliente != 6);
+    } while (menu_cliente != 5);
 }
 
 // caga nesta cena de simulaçao sou so testes ahah
@@ -508,7 +482,7 @@ int main(void)
             Clientes(listaClientes);
             break;
         case 3:
-            printf("Você escolheu a Caixas.\n");
+            printf("Você escolheu a Funcionarios.\n");
             Funcionarios(listaFuncionarios);
             break;
         case 4:
